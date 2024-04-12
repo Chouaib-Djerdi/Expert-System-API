@@ -17,4 +17,4 @@ class ProblemSerializer(serializers.ModelSerializer):
 
 
 class DiagnosisSerializer(serializers.Serializer):
-    signs = serializers.ListField(child=SignSerializer())
+    signs = serializers.ListField(child=serializers.CharField())
