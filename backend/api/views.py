@@ -25,14 +25,8 @@ class DiagnosisView(APIView):
         if serializer.is_valid():
             signs = serializer.validated_data["signs"]
             possible_problem = diagnose_problem(signs)
-            description = Problem.objects.get(name=possible_problem).description
-            solutions = Problem.objects.get(name=possible_problem).solutions
-            return Response(
-                {
-                    "problem": possible_problem,
-                    "description": description,
-                    "solutions": solutions,
-                }
-            )
+            problem = Problem.objects.get(name=possible_problem)
+            serializer = ProblemSerializer(problem)
+            return Response(serializer.data)
         else:
             return Response(serializer.errors, status=400)

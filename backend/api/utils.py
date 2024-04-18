@@ -1,7 +1,8 @@
-from aima3.logic import FolKB, expr
+from aima3.utils import expr
+from aima3.logic import FolKB, fol_fc_ask
 from .models import Sign, Problem
 
-
+# Define the knowledge base
 kb = FolKB()
 
 
@@ -27,33 +28,41 @@ def populate_kb():
 
 
 def diagnose_problem(signs):
-    # Extract sign names from the input dictionary
-    print(signs)
+    # Define the agenda and memory
+    agenda = []
+    memory = {}
 
-    # Initialize a dictionary to hold the scores for each problem
+    # Add patient symptoms to the agenda
+    for sign in signs:
+        agenda.append(expr(f"Sign('{sign}')"))
+
+    # Run the expert system
+    seen = set()  # Keep track of the conditions already processed
+    while agenda:
+        sign = agenda.pop(0)
+        if sign in seen:
+            continue  # Skip the condition if it has already been processed
+        seen.add(sign)
+        if fol_fc_ask(kb, sign):
+            memory[sign] = True
+        else:
+            memory[sign] = False
+        print(memory)
+
+    # Calculate scores for each problem based on the number of matching signs
     problem_scores = {}
-
-    # Iterate over all Problem objects
-    # for problem in Problem.objects.all():
-    # Use the knowledge base to infer whether the problem can be diagnosed based on the signs
-    # if all(kb.ask(expr(f"HasSign('{problem.name}', '{sign}')")) for sign in signs):
-    # If all signs are associated with the problem, add the problem to the diagnosed problems
-    # diagnosed_problems.append(problem.name)
-    # Iterate over all Problem objects
-
     for problem in Problem.objects.all():
-        # Calculate the score for each problem based on the number of matching signs
-        score = sum(
-            1 for sign in signs if kb.ask(expr(f"HasSign('{problem.name}', '{sign}')"))
+        matching_signs_count = sum(
+            memory.get(expr(f"Sign('{sign.name}')"), False)
+            for sign in problem.signs.all()
         )
-        # Store the score for each problem in the problem_scores dictionary
-        problem_scores[problem] = score
-
-    # Identify the problem with the highest score (returns a Problem object)
+        problem_scores[problem.name] = matching_signs_count
+    print(problem_scores)
+    # Identify the problem with the highest score
     result_problem = max(problem_scores, key=problem_scores.get)
 
-    # Return the string definition of the problem instance with the highest score
-    return str(result_problem)
+    # Return the problem name
+    return result_problem
 
 
 # Call the populate_kb function to populate the knowledge base with the data from the database
