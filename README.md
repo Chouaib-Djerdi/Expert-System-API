@@ -54,6 +54,7 @@ The `diagnose_problem` function in `utils.py` is the core of the expert system. 
 
 You can populate the database with problems and signs using the Django admin interface. Here's how:
 
+#### Method 1 : 
 1. **Create a superuser**: If you haven't already, create a superuser for your Django project using the following command:
 
 ```bash
@@ -63,3 +64,9 @@ python manage.py createsuperuser
 2. **Log in to the admin interface**: Start your Django server and navigate to `http://localhost:8000/admin` in your web browser. Log in with your superuser credentials.
 
 3. **Add problems and signs**: In the admin interface, you can add `Problem` and `Sign` instances. Each `Problem` instance should have a name, a description, solutions, and associated signs. Each `Sign` instance should have a name.
+
+#### Method 2 : 
+1. You can use the data.json located in /api/fixtures/data.json by the `loaddata` django command :
+```bash
+python manage.py loaddata api/data
+```
