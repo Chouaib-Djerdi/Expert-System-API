@@ -63,5 +63,3 @@ python manage.py createsuperuser
 2. **Log in to the admin interface**: Start your Django server and navigate to `http://localhost:8000/admin` in your web browser. Log in with your superuser credentials.
 
 3. **Add problems and signs**: In the admin interface, you can add `Problem` and `Sign` instances. Each `Problem` instance should have a name, a description, solutions, and associated signs. Each `Sign` instance should have a name.
-
-Remember to test your API thoroughly to ensure it works as expected. Good luck with your project! 😊
