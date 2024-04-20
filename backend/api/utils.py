@@ -26,6 +26,8 @@ def populate_kb():
         expr("forall_p(Problem(p) & forall_s(Sign(s) & HasSign(p, s)), Diagnose(p))")
     )
 
+    # print(kb.clauses)
+
 
 def diagnose_problem(signs):
     # Define the agenda and memory
