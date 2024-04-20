@@ -30,10 +30,3 @@ class DiagnosisView(APIView):
             return Response(serializer.data)
         else:
             return Response(serializer.errors, status=400)
-
-
-class SingleSignView(APIView):
-    def get(self, request):
-        sign = Sign.objects.get(name="High temperature gauge reading")
-        serializer = SignSerializer(sign)
-        return Response(serializer.data)
